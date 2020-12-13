@@ -8,5 +8,14 @@ namespace Assets.Scripts.Utilities
 {
     class DelaunayTriangulation
     {
+        private DelaunayTriangulation()
+        {
+
+        }
+
+        public static DelaunayTriangulation Create(Center[] centers)
+        {
+
+        }
     }
 }

@@ -8,5 +8,15 @@ namespace Assets.Scripts.Utilities
 {
     class VoronoiDiagram
     {
+        
+        private VoronoiDiagram()
+        {
+
+        }
+
+        public static VoronoiDiagram Create(Center[] centers)
+        {
+
+        }
     }
 }

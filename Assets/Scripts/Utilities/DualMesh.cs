@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Utilities
 {
-    class DualMesh
+    public class DualMesh
     {
+        Center[] centers;
+
+        public DualMesh(int pointCount)
+        {
+            centers = new Center[pointCount];
+        }
+
+        public int Size()
+        {
+            return centers.Length;
+        }
     }
 }
