@@ -73,7 +73,7 @@ namespace Assets.Scripts.Utilities
             Node target = Search(val);
             if (target == null)
                 return;
-            
+            Remove(target);
         }
 
         private Node Search(T val)
@@ -98,6 +98,54 @@ namespace Assets.Scripts.Utilities
             }
         }
 
+        private Node Remove(Node node)
+        {
+            if(node.left == null && node.right == null)
+            {
+                Replace(node, null);
+                return node;
+            }
+            else if(node.left != null)
+            {
+                Node left = node.left;
+                while(left.right != null)
+                {
+                    left = left.right;
+                }
+                Remove(left);
+                Replace(node, left);
+                // Restore red-black property
+            }
+            else
+            {
+                Node right = node.right;
+                while (right.left != null)
+                {
+                    right = right.left;
+                }
+                Remove(right);
+                Replace(node, right);
+                // Restore red-black property
+            }
+        }
+        private void Replace(Node curr, Node replacer)
+        {
+            if (curr == curr.parent.left)
+                curr.parent.left = replacer;
+            else
+                curr.parent.right = replacer;
+            if(replacer != null)
+            {
+                replacer.parent = curr.parent;
+                replacer.left = curr.left;
+                if(curr.left != null)
+                    curr.left.parent = replacer;
+                replacer.right = curr.right;
+                if(curr.right != null)
+                    curr.right.parent = replacer;
+            }
+            
+        }
         void Rebalance(Node node)
         {
             Node par = node.parent;
