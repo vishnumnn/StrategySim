@@ -102,8 +102,16 @@ namespace Assets.Scripts.Utilities
         {
             if(node.left == null && node.right == null)
             {
-                Replace(node, null);
-                return node;
+                // handle deletion
+                if(node == head)
+                {
+                    head = null;
+                    return head;
+                }
+                if (node.color)
+                    HoistNull(node);
+                else
+                    FixDoubleBlack(node);
             }
             else if(node.left != null)
             {
@@ -112,9 +120,10 @@ namespace Assets.Scripts.Utilities
                 {
                     left = left.right;
                 }
+                T temp = node.val;
+                node.val = left.val;
+                left.val = temp;
                 Remove(left);
-                Replace(node, left);
-                // Restore red-black property
             }
             else
             {
@@ -123,29 +132,99 @@ namespace Assets.Scripts.Utilities
                 {
                     right = right.left;
                 }
+                T temp = node.val;
+                node.val = right.val;
+                right.val = temp;
                 Remove(right);
-                Replace(node, right);
-                // Restore red-black property
             }
         }
-        private void Replace(Node curr, Node replacer)
+
+        private void FixDoubleBlack(Node node)
         {
-            if (curr == curr.parent.left)
-                curr.parent.left = replacer;
+            if (node == head)
+                return;
+            Node sib = GetSibling(node);
+            if (sib == null)
+                FixDoubleBlack(node.parent);
             else
-                curr.parent.right = replacer;
-            if(replacer != null)
             {
-                replacer.parent = curr.parent;
-                replacer.left = curr.left;
-                if(curr.left != null)
-                    curr.left.parent = replacer;
-                replacer.right = curr.right;
-                if(curr.right != null)
-                    curr.right.parent = replacer;
+                if (sib.color)
+                {
+                    sib.color = false;
+                    sib.parent.color = true;
+                    if (sib == sib.parent.left)
+                        RightRotate(sib);
+                    else
+                        LeftRotate(sib);
+                    FixDoubleBlack(node);
+                }
+                else
+                {
+                    if(sib.left != null && sib.left.color)
+                    {
+                        if (sib == sib.parent.left)
+                        {
+                            sib.left.color = sib.color;
+                            sib.color = sib.parent.color;
+                            RightRotate(sib);
+                        }
+                        else
+                        {
+                            sib.left.color = sib.right.color;
+                            Node child = sib.left;
+                            RightRotate(child);
+                            LeftRotate(child);
+                        }
+                        node.parent.color = false;
+                    }
+                    else if(sib.right != null && sib.right.color)
+                    {
+                        sib.right.color = false;
+                        if (sib == sib.parent.right)
+                        {
+                            sib.right.color = sib.color;
+                            sib.color = sib.parent.color;
+                            LeftRotate(sib);
+                        }
+                        else
+                        {
+                            sib.right.color = sib.parent.color;
+                            Node child = sib.left;
+                            LeftRotate(child);
+                            RightRotate(child);
+                        }
+                        node.parent.color = false;
+                    }
+                    else
+                    {
+                        sib.color = true;
+                        if (node.parent.color)
+                            node.parent.color = false;
+                        else
+                            FixDoubleBlack(node.parent);
+                    }
+                }
             }
-            
+            if (node.left == null && node.right == null)
+                HoistNull(node);
         }
+
+        private void HoistNull(Node node)
+        {
+            if (node == node.parent.left)
+                node.parent.left = null;
+            else
+                node.parent.right = null;
+        }
+
+        private Node GetSibling(Node node)
+        {
+            if (node == node.parent.left)
+                return node.parent.right;
+            else
+                return node.parent.left;
+        }
+
         void Rebalance(Node node)
         {
             Node par = node.parent;
