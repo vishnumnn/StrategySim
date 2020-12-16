@@ -70,7 +70,32 @@ namespace Assets.Scripts.Utilities
 
         void Remove(T val)
         {
+            Node target = Search(val);
+            if (target == null)
+                return;
+            
+        }
 
+        private Node Search(T val)
+        {
+            Node curr = head;
+            while (true)
+            {
+                if (curr.val.CompareTo(val) == 0)
+                    return curr;
+                else if(curr.val.CompareTo(val) > 0)
+                {
+                    if (curr.left == null)
+                        return null;
+                    curr = curr.left;
+                }
+                else
+                {
+                    if (curr.right == null)
+                        return null;
+                    curr = curr.right;
+                }
+            }
         }
 
         void Rebalance(Node node)
@@ -84,18 +109,71 @@ namespace Assets.Scripts.Utilities
                     par.color = false;
                     uncle.color = false;
                     par.parent.color = true;
+                    node = par.parent;
+                    par = node.parent;
                 }
                 else // rotate and re-color
                 {
-
+                    par.parent.color = true;
+                    if(par == par.left)
+                    {
+                        if(node == par.left)
+                        {
+                            RightRotate(par);                           
+                        }
+                        else
+                        {
+                            LeftRotate(node);
+                            RightRotate(node);
+                            node.color = false;
+                        }
+                    }
+                    else
+                    {
+                        if (node == par.right)
+                        {
+                            LeftRotate(par);
+                        }
+                        else
+                        {
+                            RightRotate(node);
+                            LeftRotate(node);
+                            node.color = false;
+                        }
+                    }
+                    break;
                 }
-                node = par;
-                par = node.parent;
             }
             if (par == null && node.color)
             {
                 node.color = false;
             }
+        }
+
+        private void RightRotate(Node node)
+        {
+            Node par = node.parent;
+            par.left = node.right;
+            node.right = par;
+            if (par.parent != null && par.parent.right == par)
+                par.parent.right = node;
+            else if (par.parent != null)
+                par.parent.left = node;
+            node.parent = par.parent;
+            par.parent = node;
+        }
+
+        private void LeftRotate(Node node)
+        {
+            Node par = node.parent;
+            par.right = node.left;
+            node.left = par;
+            if (par.parent != null && par.parent.right == par)
+                par.parent.right = node;
+            else if (par.parent != null)
+                par.parent.left = node;
+            node.parent = par.parent;
+            par.parent = node;
         }
     }
 }
