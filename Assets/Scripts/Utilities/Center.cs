@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
-    class Center
+    public class Center
     {
         int id;
-        Vertex[] vertices;
-        Edge[] edges;
+        List<Vertex> vertices;
+        Edge edge;
         Vector3 loc;
 
         public Center(float x, float y, float z, int id)

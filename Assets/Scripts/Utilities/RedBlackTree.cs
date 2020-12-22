@@ -8,14 +8,16 @@ namespace Assets.Scripts.Utilities
 {
     internal class RedBlackTree<T> where T : IComparable
     {
-        private class Node
+        public class Node
         {
-            public T val { get; set; }
-            public Node left { get; set; }
-            public Node right { get; set; }
-            public Node parent { get; set; }
-            public bool color { get; set; }
+            public T val;
+            public Node left;
+            public Node right;
+            public Node parent;
+            public bool color;
+            public Node next, previous;
             public Node(T val, bool color)
+
             {
                 this.val = val;
                 this.color = color;
@@ -31,12 +33,12 @@ namespace Assets.Scripts.Utilities
             head = null;
         }
 
-        void Insert(T val)
+        public Node Insert(T val)
         {
            if(head == null)
             {
                 head = new Node(val, false);
-                return;
+                return head;
             }
             Node curr = head;
             while(curr != null)
@@ -66,17 +68,19 @@ namespace Assets.Scripts.Utilities
             }
             // Rebalance Tree if necessary
             Rebalance(curr);
+            return curr;
         }
 
-        void Remove(T val)
+        public Node Remove(T val)
         {
             Node target = Search(val);
             if (target == null)
-                return;
+                return null;
             Remove(target);
+            return target;
         }
 
-        private Node Search(T val)
+        public Node Search(T val)
         {
             Node curr = head;
             while (true)
@@ -98,7 +102,7 @@ namespace Assets.Scripts.Utilities
             }
         }
 
-        private Node Remove(Node node)
+        private void Remove(Node node)
         {
             if(node.left == null && node.right == null)
             {
@@ -106,7 +110,7 @@ namespace Assets.Scripts.Utilities
                 if(node == head)
                 {
                     head = null;
-                    return head;
+                    return;
                 }
                 if (node.color)
                     HoistNull(node);
@@ -227,6 +231,8 @@ namespace Assets.Scripts.Utilities
 
         void Rebalance(Node node)
         {
+            if (node == null)
+                return;
             Node par = node.parent;
             while(par != null && par.color)
             {
@@ -246,26 +252,28 @@ namespace Assets.Scripts.Utilities
                     {
                         if(node == par.left)
                         {
+                            par.color = false;
                             RightRotate(par);                           
                         }
                         else
                         {
+                            node.color = false;
                             LeftRotate(node);
                             RightRotate(node);
-                            node.color = false;
                         }
                     }
                     else
                     {
                         if (node == par.right)
                         {
+                            par.color = false;
                             LeftRotate(par);
                         }
                         else
                         {
+                            node.color = false;
                             RightRotate(node);
                             LeftRotate(node);
-                            node.color = false;
                         }
                     }
                     break;

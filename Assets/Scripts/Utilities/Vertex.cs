@@ -7,10 +7,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
-    class Vertex
+    public class Vertex
     {
         int id;
-        Edge[] edges;
         Vector3 loc;
 
         public Vertex(float x, float y, float z, int id)

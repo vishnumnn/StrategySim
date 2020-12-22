@@ -7,10 +7,17 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
-    class Edge
+    public class Edge
     {
-        int id;
-        Center n1, n2;
-        Vertex v1, v2;
+        Vertex start, end;
+        Edge next, previous;
+        Edge twin;
+        Center center;
+
+        public Edge(Vertex start, Center center)
+        {
+            this.start = start;
+            this.center = center;
+        }
     }
 }
