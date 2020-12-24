@@ -50,7 +50,10 @@ namespace Assets.Scripts.Utilities
 
         public void Delete(T value)
         {
-            int idx = Search(value);
+            int idx;
+            if (map.ContainsKey(value))
+                idx = map[value];
+            else return;
             Swap(idx, arr.Count - 1);
             HeapifyDown(idx);
         }
@@ -63,18 +66,6 @@ namespace Assets.Scripts.Utilities
             map.Add(value, arr.Count - 1);
             HeapifyUp(arr.Count - 1);
             return true;
-        }
-
-        private int Search(T value)
-        {
-            int i = 0;
-            foreach(T e in arr)
-            {
-                if (e.CompareTo(value) == 0)
-                    return i;
-                i += 1;
-            }
-            return -1;
         }
 
         private void HeapifyDown(int index)
