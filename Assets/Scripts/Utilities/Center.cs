@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
-    public class Center
+    public class Center : Point
     {
-        int id;
-        List<Vertex> vertices;
         Edge edge;
-        Vector3 loc;
-
         public Center(float x, float y, float z, int id)
         {
             this.id = id;

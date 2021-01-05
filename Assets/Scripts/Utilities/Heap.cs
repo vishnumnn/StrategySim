@@ -11,20 +11,21 @@ namespace Assets.Scripts.Utilities
         public List<T> arr;
         public bool isMax;
         private Dictionary<T, int> map;
+
         public Heap(bool isMax)
         {
             this.isMax = isMax;
             map = new Dictionary<T, int>();
         }
 
-        public Heap(List<T> elements, bool isMax)
+        public Heap(T[] elements, bool isMax)
         {
-            arr = elements;
             this.isMax = isMax;
             map = new Dictionary<T, int>();
-            for(int i = 0; i < arr.Count; i++)
+            for(int i = 0; i < elements.Length; i++)
             {
-                map.Add(arr[i], i);
+                arr.Add(elements[i]);
+                map.Add(elements[i], i);
             }
             MakeHeap();
         }
@@ -68,6 +69,10 @@ namespace Assets.Scripts.Utilities
             return true;
         }
 
+        public int Count()
+        {
+            return arr == null ? 0 : arr.Count;
+        }
         private void HeapifyDown(int index)
         {
             int c1 = index * 2 + 1;

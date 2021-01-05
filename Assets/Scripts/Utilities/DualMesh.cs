@@ -14,7 +14,6 @@ namespace Assets.Scripts.Utilities
         public DualMesh(int pointCount)
         {
             centers = new Center[pointCount];
-            vertices = new List<Vertex>(pointCount);
             this.CreateCenters(centers);
         }
 
@@ -34,7 +33,9 @@ namespace Assets.Scripts.Utilities
 
         private void CreateVoronoiDiagram(Center[] centers)
         {
-            
+            Heap<Point> q = new Heap<Point>(centers, false);
+            while(q.)
+
         }
 
         private void CreateTriangulation(Center[] centers)
