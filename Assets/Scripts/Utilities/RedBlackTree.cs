@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Utilities
 {
-    internal class RedBlackTree<T> where T : IComparable
+    public class RedBlackTree<T> where T : IComparable
     {
         public class Node
         {
@@ -27,15 +27,17 @@ namespace Assets.Scripts.Utilities
             }
         }
 
-        private Node head { get; set; }
-        RedBlackTree()
+        public Node head { get; set; }
+        public RedBlackTree()
         {
             head = null;
         }
 
         public Node Insert(T val)
         {
-           if(head == null)
+            if (val == null)
+                return null;
+            if(head == null)
             {
                 head = new Node(val, false);
                 return head;
@@ -73,6 +75,8 @@ namespace Assets.Scripts.Utilities
 
         public Node Remove(T val)
         {
+            if (val == null)
+                return null;
             Node target = Search(val);
             if (target == null)
                 return null;
@@ -99,6 +103,25 @@ namespace Assets.Scripts.Utilities
                         return null;
                     curr = curr.right;
                 }
+            }
+        }
+
+        public T[] InOrderTraversal()
+        {
+            List<T> ar = new List<T>();
+            InOrderHelper(ar, this.head);
+        }
+
+        private void InOrderHelper(List<T> ar, Node node)
+        {
+            if(node.left != null)
+            {
+                InOrderHelper(ar, node.left);
+            }
+            ar.Add(node.val);
+            if(node.right != null)
+            {
+                InOrderHelper(ar, node.right);
             }
         }
 

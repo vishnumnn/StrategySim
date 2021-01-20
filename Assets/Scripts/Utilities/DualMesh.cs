@@ -34,7 +34,18 @@ namespace Assets.Scripts.Utilities
         private void CreateVoronoiDiagram(Center[] centers)
         {
             Heap<Point> q = new Heap<Point>(centers, false);
-            while(q.)
+            while(q.Count() > 0)
+            {
+                Point x = q.ExtractTop();
+                if(x.GetType().Name == "Vertex")
+                {
+                    Vertex point_event = (Vertex) x;
+                }
+                else if(x.GetType().Name == "Center")
+                {
+                    Center int_event = (Center) x;
+                }
+            }
 
         }
 
