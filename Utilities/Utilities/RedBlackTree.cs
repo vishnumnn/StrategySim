@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Utilities
+namespace Utilities
 {
     public class RedBlackTree<T> where T : IComparable
     {
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Utilities
             public Node left;
             public Node right;
             public Node parent;
-            public bool color;
+            public bool color; // False is black, True is red
             public Node next, previous;
             public Node(T val, bool color)
 
@@ -106,22 +106,23 @@ namespace Assets.Scripts.Utilities
             }
         }
 
-        public T[] InOrderTraversal()
+        public List<Tuple<T, bool>> PreOrderTraversal()
         {
-            List<T> ar = new List<T>();
-            InOrderHelper(ar, this.head);
+            List<Tuple<T,bool>> ar = new List<Tuple<T, bool>>();
+            PreOrderHelper(ar, this.head);
+            return ar;
         }
 
-        private void InOrderHelper(List<T> ar, Node node)
+        private void PreOrderHelper(List<Tuple<T,bool>> ar, Node node)
         {
-            if(node.left != null)
+            ar.Add(new Tuple<T,bool>(node.val,node.color));
+            if (node.left != null)
             {
-                InOrderHelper(ar, node.left);
+                PreOrderHelper(ar, node.left);
             }
-            ar.Add(node.val);
-            if(node.right != null)
+            if (node.right != null)
             {
-                InOrderHelper(ar, node.right);
+                PreOrderHelper(ar, node.right);
             }
         }
 
@@ -260,7 +261,7 @@ namespace Assets.Scripts.Utilities
             while(par != null && par.color)
             {
                 Node uncle = par == par.parent.left ? par.parent.right : par.parent.left;
-                if (uncle.color) // re-color only
+                if (uncle != null && uncle.color) // re-color only
                 {
                     par.color = false;
                     uncle.color = false;
@@ -270,16 +271,20 @@ namespace Assets.Scripts.Utilities
                 }
                 else // rotate and re-color
                 {
-                    par.parent.color = true;
-                    if(par == par.left)
+                    Node gp = par.parent;
+                    gp.color = true;
+                    Node potentialHead = head;
+                    if(par == par.parent.left)
                     {
                         if(node == par.left)
                         {
+                            potentialHead = par;
                             par.color = false;
-                            RightRotate(par);                           
+                            RightRotate(par);
                         }
                         else
                         {
+                            potentialHead = node;
                             node.color = false;
                             LeftRotate(node);
                             RightRotate(node);
@@ -289,16 +294,20 @@ namespace Assets.Scripts.Utilities
                     {
                         if (node == par.right)
                         {
+                            potentialHead = par;
                             par.color = false;
                             LeftRotate(par);
                         }
                         else
                         {
+                            potentialHead = node;
                             node.color = false;
                             RightRotate(node);
                             LeftRotate(node);
                         }
                     }
+                    if (gp == head)
+                        head = potentialHead;
                     break;
                 }
             }

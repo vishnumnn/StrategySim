@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Utilities
+namespace Utilities
 {
     public class Center : Point
     {
